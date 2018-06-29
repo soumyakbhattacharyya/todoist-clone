@@ -15,15 +15,16 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.5.14.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-                <docker-relish-image>craigbarrau/relish</docker-relish-image>
-                <cucumber-version>1.2.5</cucumber-version>
+		<docker-relish-image>craigbarrau/relish</docker-relish-image>
+		<cucumber-version>1.2.5</cucumber-version>
+		<relish.api.token>ModnAVrghbppdz58Lse9</relish.api.token>
 	</properties>
 
 	<dependencies>
@@ -60,23 +61,22 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-                 <dependency>
-		    <groupId>info.cukes</groupId>
-		    <artifactId>cucumber-java</artifactId>
-		    <version>${cucumber-version}</version>
-		    <scope>test</scope>
+		<dependency>
+			<groupId>info.cukes</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>${cucumber-version}</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
-		    <groupId>info.cukes</groupId>
-		    <artifactId>cucumber-junit</artifactId>
-		    <version>${cucumber-version}</version>
-		    <scope>test</scope>
+			<groupId>info.cukes</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<version>${cucumber-version}</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
-		    <groupId>junit</groupId>
-		    <artifactId>junit</artifactId>
-		    <scope>test</scope>
-		    <version>4.12</version>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
@@ -86,29 +86,30 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-                        <plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.7</version>
 				<executions>
-					
+
 					<execution>
 						<id>push-features-to-relish</id>
-						<phase>deploy</phase>
+						<phase>install</phase>
 						<goals>
 							<goal>run</goal>
 						</goals>
 						<configuration>
 							<target>
-								<property environment="env"/>
-								<fail unless="env.RELISH_API_TOKEN" message="RELISH_API_TOKEN not set.\n To get a token run `relish project` and enter your relishapp.com username and password. The token will exist in ~/.relish"/>
+								<!-- <property environment="env" />
+								<fail unless="${relish.api.token}"
+									message="RELISH_API_TOKEN not set.\n To get a token run `relish project` and enter your relishapp.com username and password. The token will exist in ~/.relish" /> -->
 								<exec executable="/bin/bash" failonerror="true">
-									<arg value="-c"/>
-								    <arg value="docker pull ${docker-relish-image}"/>
+									<arg value="-c" />
+									<arg value="docker pull ${docker-relish-image}" />
 								</exec>
 								<exec executable="/bin/bash" failonerror="true">
-									<arg value="-c"/>
-								    <arg value="docker run --rm -t --volume=$PWD:/localDebugRepo --workdir=/localDebugRepo --memory=2048m ${docker-relish-image} ${RELISH_API_TOKEN} rubiconred/myst-studio"/>
+									<arg value="-c" />
+									<arg
+										value="docker run --rm -t --volume=$PWD:/src:ro ${docker-relish-image} ${relish.api.token} todoist-clone" />
 								</exec>
 							</target>
 						</configuration>
